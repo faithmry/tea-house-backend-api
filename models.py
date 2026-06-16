@@ -32,6 +32,7 @@ class Transaction(Base):
     points_earned: Mapped[int] = mapped_column(Integer)
     date: Mapped[str] = mapped_column(String(50))
     type: Mapped[str] = mapped_column(String(20), default="PURCHASE")
+    order_id: Mapped[str | None] = mapped_column(String(50), nullable=True)
 
 
 class MenuItem(Base):

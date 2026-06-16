@@ -113,6 +113,7 @@ def update_order_status(
                 points_earned=points_to_add,
                 date=str(int(time.time() * 1000)),
                 type="PURCHASE",
+                order_id=order.id,
             ))
 
     session.commit()

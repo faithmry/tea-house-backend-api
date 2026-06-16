@@ -45,6 +45,7 @@ class TransactionOut(BaseModel):
     points_earned: int = Field(alias="pointsEarned")
     date: str
     type: str
+    order_id: str | None = Field(default=None, alias="orderId")
 
 
 class MenuItemOut(BaseModel):
