@@ -87,8 +87,8 @@ def update_order_status(
     order = session.get(Order, order_id)
     if order is None:
         raise HTTPException(status_code=404, detail="Order not found")
-    if request.status not in ("PENDING", "RECEIVED"):
-        raise HTTPException(status_code=400, detail="Status harus PENDING atau RECEIVED")
+    if request.status not in ("PENDING", "RECEIVED", "CANCELLED"):
+        raise HTTPException(status_code=400, detail="Status harus PENDING, RECEIVED, atau CANCELLED")
 
     was_pending = order.status == "PENDING"
     order.status = request.status
