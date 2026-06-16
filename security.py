@@ -1,10 +1,3 @@
-"""JWT security — equivalent of plugins/Security.kt.
-
-Generates and validates HS256 tokens with the same audience/issuer/claims as
-the Ktor version, and exposes a FastAPI dependency that protects routes the
-way `authenticate("auth-jwt")` did.
-"""
-
 import os
 from datetime import datetime, timedelta, timezone
 
@@ -12,8 +5,6 @@ import jwt
 from fastapi import Depends, HTTPException, status
 from fastapi.security import HTTPAuthorizationCredentials, HTTPBearer
 
-# These should come from environment variables in a real app (kept identical to
-# the Kotlin defaults so existing tokens/clients stay compatible).
 JWT_AUDIENCE = "teahouse-api"
 JWT_ISSUER = "https://teahouse-api.railway.app/"
 JWT_REALM = "teahouse-api"
@@ -24,7 +15,6 @@ _bearer = HTTPBearer(auto_error=False)
 
 
 def generate_token(member_id: str) -> str:
-    """Create a 1-hour HS256 token carrying the member id claim."""
     now = datetime.now(timezone.utc)
     payload = {
         "aud": JWT_AUDIENCE,
@@ -38,7 +28,6 @@ def generate_token(member_id: str) -> str:
 def require_jwt(
     credentials: HTTPAuthorizationCredentials | None = Depends(_bearer),
 ) -> dict:
-    """Validate the bearer token; mirrors the Ktor verifier + challenge."""
     if credentials is None or credentials.scheme.lower() != "bearer":
         raise HTTPException(
             status_code=status.HTTP_401_UNAUTHORIZED,

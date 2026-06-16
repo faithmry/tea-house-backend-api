@@ -11,5 +11,4 @@ router = APIRouter(prefix="/menu")
 
 @router.get("", response_model=list[MenuItemOut])
 def get_menu(session: Session = Depends(get_session)) -> list[MenuItem]:
-    """Public endpoint — no auth required."""
     return list(session.scalars(select(MenuItem).where(MenuItem.is_available == True)))

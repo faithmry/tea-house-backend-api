@@ -1,7 +1,3 @@
-"""Application entry point — equivalent of Application.kt.
-
-Run with:  uvicorn teahouse.main:app --host 0.0.0.0 --port 8080
-"""
 
 import uuid
 from contextlib import asynccontextmanager

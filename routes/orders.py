@@ -6,7 +6,7 @@ from sqlalchemy import select
 from sqlalchemy.orm import Session
 
 from ..database import get_session
-from ..models import Member, MenuItem, Order, OrderItem
+from ..models import Member, MenuItem, Order, OrderItem, Transaction
 from ..schemas import CreateOrderRequest, OrderItemOut, OrderOut, UpdateOrderStatusRequest
 from ..security import require_jwt
 
@@ -63,7 +63,6 @@ def list_orders(
     status: str | None = None,
     session: Session = Depends(get_session),
 ) -> list[OrderOut]:
-    """Admin endpoint — list semua order, bisa filter by status (PENDING/RECEIVED)."""
     query = select(Order).order_by(Order.created_at.desc())
     if status:
         query = query.where(Order.status == status)
@@ -85,7 +84,6 @@ def update_order_status(
     request: UpdateOrderStatusRequest,
     session: Session = Depends(get_session),
 ) -> OrderOut:
-    """Admin endpoint — tidak butuh JWT. Ketika status → RECEIVED, poin diberikan ke member."""
     order = session.get(Order, order_id)
     if order is None:
         raise HTTPException(status_code=404, detail="Order not found")
@@ -100,13 +98,20 @@ def update_order_status(
         if member:
             points_to_add = int(order.total_amount // 5000)
             member.points += points_to_add
-            # Update tier based on total points
             if member.points >= 10000:
                 member.tier = "Platinum"
             elif member.points >= 5000:
                 member.tier = "Gold"
             elif member.points >= 2000:
                 member.tier = "Silver"
+            session.add(Transaction(
+                id=str(uuid.uuid4()),
+                member_id=order.member_id,
+                amount=order.total_amount,
+                points_earned=points_to_add,
+                date=str(int(time.time() * 1000)),
+                type="PURCHASE",
+            ))
 
     session.commit()
     return _load_order_out(order, session)

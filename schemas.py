@@ -1,10 +1,3 @@
-"""JSON request/response models — equivalent of the Kotlin @Serializable classes.
-
-`alias`/`populate_by_name` keep the JSON keys identical to the Kotlin API
-(`memberId`, `pointsEarned`, `profilePictureUrl`) so existing clients (the
-Android app) don't have to change.
-"""
-
 from pydantic import BaseModel, ConfigDict, Field
 
 
@@ -31,8 +24,6 @@ class RegisterRequest(BaseModel):
 
 
 class AuthResponse(BaseModel):
-    """Returned by /login and /register: a token plus the member profile."""
-
     token: str
     member_id: str = Field(serialization_alias="memberId")
     member: MemberOut
