@@ -1,6 +1,7 @@
 import os
 from datetime import datetime, timedelta, timezone
 
+import bcrypt
 import jwt
 from fastapi import Depends, HTTPException, status
 from fastapi.security import HTTPAuthorizationCredentials, HTTPBearer
@@ -12,6 +13,14 @@ JWT_SECRET = os.getenv("JWT_SECRET", "secret-key-change-this")
 JWT_ALGORITHM = "HS256"
 
 _bearer = HTTPBearer(auto_error=False)
+
+
+def hash_password(plain: str) -> str:
+    return bcrypt.hashpw(plain.encode(), bcrypt.gensalt()).decode()
+
+
+def verify_password(plain: str, hashed: str) -> bool:
+    return bcrypt.checkpw(plain.encode(), hashed.encode())
 
 
 def generate_token(member_id: str) -> str:

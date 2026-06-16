@@ -19,6 +19,7 @@ class Member(Base):
     phone: Mapped[str] = mapped_column(String(20), unique=True)
     points: Mapped[int] = mapped_column(Integer, default=0)
     tier: Mapped[str] = mapped_column(String(20), default="Bronze")
+    password_hash: Mapped[str | None] = mapped_column(String(255), nullable=True)
     profile_picture_url: Mapped[str | None] = mapped_column(String(255), nullable=True)
 
 

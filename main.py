@@ -17,7 +17,7 @@ from .schemas import (
     RegisterRequest,
     TransactionOut,
 )
-from .security import generate_token, require_jwt
+from .security import generate_token, hash_password, require_jwt, verify_password
 
 
 @asynccontextmanager
@@ -52,6 +52,7 @@ def register(
         phone=request.phone,
         points=0,
         tier="Bronze",
+        password_hash=hash_password(request.password),
     )
     session.add(member)
     session.commit()
@@ -72,7 +73,12 @@ def login(
     if member is None:
         raise HTTPException(
             status_code=status.HTTP_401_UNAUTHORIZED,
-            detail="Phone number is not registered",
+            detail="Nomor HP belum terdaftar.",
+        )
+    if not member.password_hash or not verify_password(request.password, member.password_hash):
+        raise HTTPException(
+            status_code=status.HTTP_401_UNAUTHORIZED,
+            detail="Password salah.",
         )
 
     return AuthResponse(

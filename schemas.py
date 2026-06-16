@@ -15,12 +15,14 @@ class MemberOut(BaseModel):
 
 class LoginRequest(BaseModel):
     phone: str
+    password: str
 
 
 class RegisterRequest(BaseModel):
     name: str
     email: str
     phone: str
+    password: str
 
 
 class AuthResponse(BaseModel):

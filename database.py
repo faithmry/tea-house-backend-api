@@ -5,6 +5,7 @@ from sqlalchemy import create_engine, select
 from sqlalchemy.orm import Session, sessionmaker
 
 from .models import Base, Member, MenuItem
+from .security import hash_password
 
 _DB_PATH = Path(__file__).parent / "tea_house.db"
 
@@ -47,6 +48,7 @@ def configure_databases() -> None:
                     phone="08123456789",
                     points=1000,
                     tier="Gold",
+                    password_hash=hash_password("password123"),
                 )
             )
             session.commit()
