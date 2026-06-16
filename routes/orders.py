@@ -98,12 +98,14 @@ def update_order_status(
         if member:
             points_to_add = int(order.total_amount // 5000)
             member.points += points_to_add
-            if member.points >= 10000:
+            if member.points >= 1000:
                 member.tier = "Platinum"
-            elif member.points >= 5000:
+            elif member.points >= 500:
                 member.tier = "Gold"
-            elif member.points >= 2000:
+            elif member.points >= 200:
                 member.tier = "Silver"
+            else:
+                member.tier = "Bronze"
             session.add(Transaction(
                 id=str(uuid.uuid4()),
                 member_id=order.member_id,
