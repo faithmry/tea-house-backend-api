@@ -38,7 +38,6 @@ def root() -> str:
 def register(
     request: RegisterRequest, session: Session = Depends(get_session)
 ) -> AuthResponse:
-    # Phone is the login identifier, so reject duplicates with 409.
     existing = session.scalar(select(Member).where(Member.phone == request.phone))
     if existing is not None:
         raise HTTPException(
@@ -69,8 +68,6 @@ def register(
 def login(
     request: LoginRequest, session: Session = Depends(get_session)
 ) -> AuthResponse:
-    # Look the member up by phone and issue a token for *their* id (no longer a
-    # hardcoded mock). The seeded demo member "Andi" logs in via phone too.
     member = session.scalar(select(Member).where(Member.phone == request.phone))
     if member is None:
         raise HTTPException(
@@ -91,7 +88,6 @@ def get_member(
     session: Session = Depends(get_session),
     payload: dict = Depends(require_jwt),
 ) -> Member:
-    # Protected + ownership check: a member may only read their own profile.
     if payload.get("id") != member_id:
         raise HTTPException(
             status_code=status.HTTP_403_FORBIDDEN,

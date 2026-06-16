@@ -2,7 +2,6 @@ import os
 
 from sqlalchemy import create_engine, select
 from sqlalchemy.orm import Session, sessionmaker
-from sqlalchemy.pool import StaticPool
 
 from .models import Base, Member, MenuItem
 
@@ -20,9 +19,8 @@ def _build_engine():
         return create_engine(url, pool_pre_ping=True)
 
     return create_engine(
-        "sqlite+pysqlite:///:memory:",
+        "sqlite+pysqlite:///./tea_house.db",
         connect_args={"check_same_thread": False},
-        poolclass=StaticPool,
     )
 
 
