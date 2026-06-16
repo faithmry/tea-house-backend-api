@@ -14,7 +14,7 @@ from sqlalchemy import create_engine, select
 from sqlalchemy.orm import Session, sessionmaker
 from sqlalchemy.pool import StaticPool
 
-from .models import Base, Member
+from .models import Base, Member, MenuItem
 
 
 def _build_engine():
@@ -65,6 +65,17 @@ def configure_databases() -> None:
                     tier="Gold",
                 )
             )
+            session.commit()
+
+        menu_exists = session.scalar(select(MenuItem).limit(1)) is not None
+        if not menu_exists:
+            session.add_all([
+                MenuItem(name="Green Tea Latte", description="Premium matcha dengan susu segar", price=28000, category="Minuman"),
+                MenuItem(name="Oolong Milk Tea", description="Oolong klasik dengan susu segar", price=25000, category="Minuman"),
+                MenuItem(name="Jasmine Cold Brew", description="Cold brew teh melati yang menyegarkan", price=22000, category="Minuman"),
+                MenuItem(name="Earl Grey Cake", description="Kue sponge dengan aroma bergamot", price=35000, category="Makanan"),
+                MenuItem(name="Matcha Cheesecake", description="Cheesecake no-bake dengan matcha premium", price=38000, category="Makanan"),
+            ])
             session.commit()
 
 
