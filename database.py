@@ -56,11 +56,24 @@ def configure_databases() -> None:
         menu_exists = session.scalar(select(MenuItem).limit(1)) is not None
         if not menu_exists:
             session.add_all([
-                MenuItem(name="Green Tea Latte", description="Premium matcha dengan susu segar", price=28000, category="Minuman"),
-                MenuItem(name="Oolong Milk Tea", description="Oolong klasik dengan susu segar", price=25000, category="Minuman"),
-                MenuItem(name="Jasmine Cold Brew", description="Cold brew teh melati yang menyegarkan", price=22000, category="Minuman"),
-                MenuItem(name="Earl Grey Cake", description="Kue sponge dengan aroma bergamot", price=35000, category="Makanan"),
-                MenuItem(name="Matcha Cheesecake", description="Cheesecake no-bake dengan matcha premium", price=38000, category="Makanan"),
+                # Minuman (8)
+                MenuItem(name="Green Tea Latte",   description="Premium matcha dengan susu segar",         price=28000, category="Minuman"),
+                MenuItem(name="Oolong Milk Tea",   description="Oolong klasik dengan susu fresh",           price=25000, category="Minuman"),
+                MenuItem(name="Jasmine Cold Brew", description="Cold brew teh melati yang menyegarkan",     price=22000, category="Minuman"),
+                MenuItem(name="Taro Milk Tea",     description="Boba taro ungu dengan susu fresh",          price=27000, category="Minuman"),
+                MenuItem(name="Brown Sugar Boba",  description="Boba dengan gula aren dan susu",            price=29000, category="Minuman"),
+                MenuItem(name="Matcha Smoothie",   description="Matcha blend dengan yogurt dan madu",       price=32000, category="Minuman"),
+                MenuItem(name="Lychee Oolong",     description="Oolong segar dengan lychee asli",           price=26000, category="Minuman"),
+                MenuItem(name="Honey Lemon Tea",   description="Teh hitam dengan lemon dan madu",           price=23000, category="Minuman"),
+                # Makanan (8)
+                MenuItem(name="Earl Grey Cake",    description="Kue sponge dengan aroma bergamot",          price=35000, category="Makanan"),
+                MenuItem(name="Matcha Cheesecake", description="Cheesecake no-bake dengan matcha premium",  price=38000, category="Makanan"),
+                MenuItem(name="Onigiri Salmon",    description="Onigiri isi salmon mayo",                   price=25000, category="Makanan"),
+                MenuItem(name="Croissant Matcha",  description="Croissant lapis matcha butter",             price=32000, category="Makanan"),
+                MenuItem(name="Sandwich Tuna",     description="Sandwich roti tawar dengan tuna segar",     price=28000, category="Makanan"),
+                MenuItem(name="Toast Butter Kaya", description="Roti toast dengan butter dan kaya",         price=22000, category="Makanan"),
+                MenuItem(name="Mochi Ice Cream",   description="Mochi kenyal isi es krim matcha",           price=30000, category="Makanan"),
+                MenuItem(name="Waffle Matcha",     description="Waffle crispy dengan topping matcha sauce", price=35000, category="Makanan"),
             ])
             session.commit()
 
